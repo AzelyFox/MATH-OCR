@@ -110,4 +110,4 @@ lint/tmp/
 out
 gen
 
-
+app/src/main/java/com/viclab/ocr/mathpix/Constant.java
