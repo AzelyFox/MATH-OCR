@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">VIC OCR</string>
+
+    <string name="editor_hint">ENTER Q INDEX</string>
+    <string name="button_clear">CLEAR</string>
+    <string name="button_ocr">OCR</string>
+    <string name="button_reset">RESET</string>
+    <string name="button_submit">SUBMIT</string>
+
+    <string name="message_latex_empty">인식된 결과가 없습니다</string>
+    <string name="message_index_empty">문제 인덱스를 입력해주세요</string>
+    <string name="message_submit_result">리턴된 응답 : </string>
+    <string name="message_submit_error">전송 에러 : </string>
+</resources>
