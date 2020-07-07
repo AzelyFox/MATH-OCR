@@ -1,16 +1,15 @@
 package com.viclab.ocr;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.*;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -33,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 	private Button buttonClear;
 	private Button buttonOCR;
 	private Button buttonReset;
+	private Button buttonCopy;
 	private Button buttonSubmit;
 	private MTMathView mathPreview;
 	private TextView mathView;
@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
 		buttonClear = findViewById(R.id.button_clear);
 		buttonOCR = findViewById(R.id.button_ocr);
 		buttonReset = findViewById(R.id.button_reset);
+		buttonCopy = findViewById(R.id.button_copy);
 		buttonSubmit = findViewById(R.id.button_submit);
 		mathPreview = findViewById(R.id.mathPreview);
 		mathView = findViewById(R.id.mathView);
@@ -93,6 +94,20 @@ public class MainActivity extends AppCompatActivity {
 				statusView.setText(null);
 				statusView.setBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.colorWhite));
 				currentLatex = null;
+			}
+		});
+
+		buttonCopy.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if (currentLatex == null) {
+					statusView.setText(R.string.message_latex_empty);
+					return;
+				}
+				ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+				ClipData clip = ClipData.newPlainText(getString(R.string.app_name), currentLatex);
+				if (clipboard != null) clipboard.setPrimaryClip(clip);
+				Toast.makeText(MainActivity.this, getString(R.string.message_copy), Toast.LENGTH_SHORT).show();
 			}
 		});
 

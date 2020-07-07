@@ -132,10 +132,19 @@
                 android:text="@string/button_reset"/>
 
             <Button
+                android:id="@+id/button_copy"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:text="@string/button_copy"/>
+
+            <Button
                 android:id="@+id/button_submit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:text="@string/button_submit"/>
