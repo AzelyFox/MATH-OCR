@@ -6,15 +6,18 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.*;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.*;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import com.agog.mathdisplay.MTMathView;
 import com.viclab.ocr.mathpix.MathpixOCR;
+import io.github.kexanie.library.MathView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -27,20 +30,24 @@ public class MainActivity extends AppCompatActivity {
 
 	private LinearLayout loader;
 	private LinearLayout canvasHolder;
+	private LinearLayout contentView;
+	private LinearLayout loadView;
 	private EditText codeEditor;
 	private TextView statusView;
 	private Button buttonClear;
+	private Button buttonModeDraw;
+	private Button buttonModeErase;
 	private Button buttonOCR;
 	private Button buttonReset;
 	private Button buttonCopy;
 	private Button buttonSubmit;
-	private MTMathView mathPreview;
+	private MathView mathPreview;
 	private TextView mathView;
 
 	private CanvasView canvasView;
 	private Paint mPaint;
 	private int mColor;
-	private final int STROKE_PAINT = 12;
+	private final int STROKE_PAINT = 10;
 	private final int STROKE_ERASE = 120;
 
 	private HttpConnection httpConnection = HttpConnection.getInstance();
@@ -58,9 +65,13 @@ public class MainActivity extends AppCompatActivity {
 	private void initializeViews() {
 		loader = findViewById(R.id.loader);
 		canvasHolder = findViewById(R.id.canvas_holder);
+		contentView = findViewById(R.id.latex_holder);
+		loadView = findViewById(R.id.latex_loader);
 		codeEditor = findViewById(R.id.codeEditor);
 		statusView = findViewById(R.id.statusView);
 		buttonClear = findViewById(R.id.button_clear);
+		buttonModeDraw = findViewById(R.id.button_mode_draw);
+		buttonModeErase = findViewById(R.id.button_mode_erase);
 		buttonOCR = findViewById(R.id.button_ocr);
 		buttonReset = findViewById(R.id.button_reset);
 		buttonCopy = findViewById(R.id.button_copy);
@@ -82,6 +93,24 @@ public class MainActivity extends AppCompatActivity {
 			}
 		});
 
+		buttonModeDraw.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				canvasView.setModeDraw();
+				buttonModeDraw.setEnabled(false);
+				buttonModeErase.setEnabled(true);
+			}
+		});
+
+		buttonModeErase.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				canvasView.setModeErase();
+				buttonModeErase.setEnabled(false);
+				buttonModeDraw.setEnabled(true);
+			}
+		});
+
 		buttonReset.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -90,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
 				statusView.setText(null);
 				statusView.setBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.colorWhite));
 				mathView.setText(null);
-				mathPreview.setLatex("");
+				mathPreview.setText("");
 				statusView.setText(null);
 				statusView.setBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.colorWhite));
 				currentLatex = null;
@@ -138,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
 		statusView.setText(null);
 		statusView.setBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.colorWhite));
 		mathView.setText(null);
-		mathPreview.setLatex("");
+		mathPreview.setText("");
 		currentLatex = null;
 		Bitmap bitmap = Bitmap.createBitmap(canvasView.getWidth(), canvasView.getHeight(), Bitmap.Config.ARGB_8888);
 		bitmap.eraseColor(Color.WHITE);
@@ -175,8 +204,38 @@ public class MainActivity extends AppCompatActivity {
 		Log.w(TAG, "Recognize Result : " + (success ? "" : "FAIL : ") + result);
 		mathView.setText(result);
 		currentLatex = result;
-		mathPreview.setLatex(result);
-		mathPreview.setFontSize(100);
+		contentView.setVisibility(View.GONE);
+		loadView.setVisibility(View.VISIBLE);
+		mathPreview.setWebViewClient(new WebViewClient() {
+			@Override
+			public void onPageStarted(WebView view, String url, Bitmap favicon) {
+				super.onPageStarted(view, url, favicon);
+				Log.w(TAG, "MathView onPageStarted : " + url);
+			}
+
+			@Override
+			public void onPageFinished(WebView view, String url) {
+				super.onPageFinished(view, url);
+				Log.w(TAG, "MathView onPageFinished : " + url);
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Handler delayer = new Handler();
+						delayer.postDelayed(new Runnable() {
+							@Override
+							public void run() {
+								loadView.setVisibility(View.GONE);
+								contentView.setVisibility(View.VISIBLE);
+							}
+						}, 1000);
+					}
+				});
+			}
+		});
+		mathPreview.setText("$${\\Huge " + result + "}$$");
+		mathPreview.setInitialScale(200);
+		mathPreview.setVerticalScrollBarEnabled(false);
+		mathPreview.setHorizontalScrollBarEnabled(false);
 	}
 
 	private void submitLatex() {

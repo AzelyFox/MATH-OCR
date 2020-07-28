@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhite">
@@ -63,6 +64,29 @@
                 android:layout_alignParentBottom="true"
                 android:text="@string/button_clear"/>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/button_mode_draw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:text="@string/button_draw"/>
+
+                <Button
+                    android:id="@+id/button_mode_erase"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="true"
+                    android:text="@string/button_erase"/>
+
+            </LinearLayout>
+
             <Button
                 android:id="@+id/button_ocr"
                 android:layout_width="wrap_content"
@@ -79,19 +103,39 @@
             android:background="@android:color/black"/>
 
         <LinearLayout
+            android:id="@+id/latex_holder"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center"
+            android:visibility="gone"
             android:orientation="vertical">
 
-            <com.agog.mathdisplay.MTMathView
+            <io.github.kexanie.library.MathView
                 android:id="@+id/mathPreview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@color/colorWhite"/>
+                app:engine="MathJax"
+                android:background="@color/colorWhite" />
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/latex_loader"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:visibility="visible"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/message_latex_loading"
+                android:textSize="20sp"
+                android:textColor="@color/colorBlack"/>
         </LinearLayout>
 
         <LinearLayout
