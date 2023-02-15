@@ -8,13 +8,13 @@
         <img src="https://img.shields.io/badge/API-Mathpix-black?style=flat-square" />
     </a>
     <a href="#license">
-        <img src="https://img.shields.io/github/license/LIMECAKE/MATH-OCR?style=flat-square" />
+        <img src="https://img.shields.io/github/license/AzelyFox/MATH-OCR?style=flat-square" />
     </a>
-    <a href="https://github.com/LIMECAKE/MATH-OCR/releases">
-        <img src="https://img.shields.io/github/v/release/LIMECAKE/MATH-OCR?style=flat-square" />
+    <a href="https://github.com/AzelyFox/MATH-OCR/releases">
+        <img src="https://img.shields.io/github/v/release/AzelyFox/MATH-OCR?style=flat-square" />
     </a>
-    <a href="https://github.com/LIMECAKE/MATH-OCR/issues">
-        <img src="https://img.shields.io/badge/SUPPORT-LIVE-green?style=flat-square" />
+    <a href="https://github.com/AzelyFox/MATH-OCR/issues">
+        <img src="https://img.shields.io/badge/SUPPORT-END-black?style=flat-square" />
     </a>
 </p>
 
